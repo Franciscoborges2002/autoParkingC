@@ -10,6 +10,8 @@
 
 #define START 0//Mudar para a verificação dos ficheiros
 
+//Valor a pagar estáa dar negativo
+
 estruturaParque * inicPrograma();
 void encerPrograma();
 
@@ -25,8 +27,8 @@ int main(){
 		
 	//imprimirParque(lista, eP);
 		
-	//inserirInicio(&lista, carro1);
-	//inserirInicio(&lista, carro2);
+	inserirInicio(&lista, carro1);
+	inserirInicio(&lista, carro2);
 		
 	//inserirCarro(lista, eP);
 		
@@ -41,13 +43,13 @@ int main(){
 			case 1:
 				{
 				listar(lista);
-				imprimirParque(lista, eP);
+				imprimirParque(1,1,1,lista, eP);
 												
 				break;
 			}
 			case 2:
 				{
-				if(lugarMaisProximo(lista, eP)[0] == -1){
+				if(lugarMaisProximo(1,1,1,lista, eP)[0] == -1){
 					printf("\nO parque está cheio\n");
 				}else {
 					dados_t *carro = criarCarro(eP, lista);

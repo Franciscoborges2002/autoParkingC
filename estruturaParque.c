@@ -29,9 +29,35 @@ estruturaParque * initParq(){
     return eP;
 }
 
-void imprimirParque(node_t *lista, estruturaParque *eP){
-	int i, j, k;
+//mudar para recursividade
+void imprimirParque(int piso, int linha, int coluna, node_t *lista, estruturaParque *eP){
+	//int i, j, k;
 	
+	//Casos de paragem
+	if(piso > eP->piso){
+		return;
+	}
+	if(linha > eP->linha){
+		printf("\n");
+		imprimirParque(piso +1, 1, 1, lista, eP);
+		return;
+	}
+	if(coluna > eP->coluna){
+		printf("\n");
+		imprimirParque(piso, linha +1, 1, lista, eP);
+		return;
+	}
+
+	//printf("piso: %d, linha: %d, coluna: %d", piso, linha, coluna);
+	
+	if(procurarNaCoord(lista, piso,linha,coluna) == 1){
+        printf("O");
+	}else{
+		printf("L");
+	}
+	imprimirParque(piso, linha, coluna +1, lista, eP);
+	
+	/*
 	for(i=0; i < eP->piso; i++){
         printf("piso %d:\n", i+1);
         for(j=0;j< eP->linha; j++){
@@ -49,14 +75,50 @@ void imprimirParque(node_t *lista, estruturaParque *eP){
             printf("\n");
         }
         printf("\n"); 
-	}
+	}*/
 }
 
-int *lugarMaisProximo(node_t *lista, estruturaParque *eP){//Retornar uma array [piso, linha, coluna]
+//Mudar para recursividade
+int *lugarMaisProximo(int piso, int linha, int coluna, node_t *lista, estruturaParque *eP){//Retornar uma array [piso, linha, coluna]
 	//int totalEspacosParque = eP->coluna * eP->linha * eP->piso;
-	int i,j,k;
+	//int i,j,k;
 	int coordenada[3];
 	
+	//casos de paragem
+	if(piso > eP->piso & linha > eP->linha && coluna > eP->coluna){
+		coordenada[0] = -1;
+		return coordenada;
+	}
+	
+	if(piso > eP->piso || coordenada[3] != 0){
+		printf("\npiso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[3]);
+		return coordenada;
+	}
+	
+	if(linha > eP->linha){
+		printf("\n");
+		lugarMaisProximo(piso +1, 1, 1, lista, eP);
+		return coordenada;
+	}
+	
+	if(coluna > eP->coluna){
+		printf("\n");
+		lugarMaisProximo(piso, linha +1, 1, lista, eP);
+		return coordenada;
+	}
+	
+	//código para executar
+	if(procurarNaCoord(lista, piso, linha, coluna) == 0){
+		printf("lugar encontrado");
+    	coordenada[0] = piso;
+        coordenada[1] = linha;
+        coordenada[2] = coluna;
+		return coordenada;	
+	}
+	
+	lugarMaisProximo(piso, linha, coluna+1, lista, eP);
+	
+	/*
 	for(i=1; i < eP->piso +1; i++){
         for(j=1;j< eP->linha +1; j++){
             for(k =1; k < eP->coluna +1; k++){
@@ -70,9 +132,7 @@ int *lugarMaisProximo(node_t *lista, estruturaParque *eP){//Retornar uma array [
 				//printf("%d", procurarNaCoord(lista, i,j,k));
             }
         }
-	}
-	coordenada[0] = -1;
-	return coordenada;
+	}*/
 }
 
 
@@ -169,9 +229,13 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 		switch(opcao){
 			case 1:
 				{
-					coordeMaisProxima[0] = lugarMaisProximo(lista, eP)[0];
-					coordeMaisProxima[1] = lugarMaisProximo(lista, eP)[1];
-					coordeMaisProxima[2] = lugarMaisProximo(lista, eP)[2];
+					//ver como mudar isto 
+					printf("piso lugar mais proximo: %d", lugarMaisProximo(1,1,1,lista, eP)[0]);
+					printf("linha lugar mais proximo: %d", lugarMaisProximo(1,1,1,lista, eP)[1]);
+					printf("coluna lugar mais proximo: %d", lugarMaisProximo(1,1,1,lista, eP)[2]);
+					coordeMaisProxima[0] = lugarMaisProximo(1,1,1,lista, eP)[0];
+					coordeMaisProxima[1] = lugarMaisProximo(1,1,1,lista, eP)[1];
+					coordeMaisProxima[2] = lugarMaisProximo(1,1,1,lista, eP)[2];
 					
 					printf("Coordenada mais proxima Piso %d, Linha %d, Coluna %d", coordeMaisProxima[0], coordeMaisProxima[1], coordeMaisProxima[2]);
 					
