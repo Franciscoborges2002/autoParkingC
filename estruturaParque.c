@@ -11,9 +11,9 @@ estruturaParque * initParq(){
     
     printf("Total de pisos? ");
     scanf("%d", &piso);
-    printf("Total de colunas? ");
-    scanf("%d", &linha);
     printf("Total de linhas? ");
+    scanf("%d", &linha);
+    printf("Total de colunas? ");
     scanf("%d", &coluna);
     printf("Qual o preco por hora? ");
     scanf("%f", &preco);
@@ -26,24 +26,68 @@ estruturaParque * initParq(){
     eP->coluna = coluna;
     eP->preco = preco;
     
+    system("cls");
+    
     return eP;
 }
 
-//mudar para recursividade
+estruturaParque * criarParqueApartirDeFicheiro(int piso, int linha, int coluna, float preco){
+	estruturaParque *eP = (estruturaParque *)malloc(sizeof(estruturaParque));//Alocar a memoria para os dados
+
+    //Guardar na struct
+	eP->piso = piso;
+    eP->linha = linha;
+    eP->coluna = coluna;
+    eP->preco = preco;
+    
+    return eP;
+}
+
+//Esta a dar um piso a mais
 void imprimirParque(int piso, int linha, int coluna, node_t *lista, estruturaParque *eP){
-	//int i, j, k;
+	
+	//prints
+	if(piso == 1){
+		if(linha == 1 && coluna == 1){
+			printf("Piso %d\n", piso);
+		}
+		
+	}
+	
+	if(coluna == 1){
+		if(!((linha -1) == eP->linha)){
+			printf("[");
+		}
+	}
+	
+	if(linha > eP->linha){
+		/*if((piso -1) == eP->piso && (coluna -1) == eP->coluna && (linha -1) == eP->linha){
+			printf("oioi");
+		}
+		if( !((piso -1) == eP->piso) && ){
+			printf("Piso %d\n", piso +1);
+			printf("\n");
+		}*/
+		
+		printf("Piso %d\n", piso +1);
+			printf("\n");
+		
+	}
+	if(coluna > eP->coluna){
+			printf("]");
+		printf("\n");
+	}
 	
 	//Casos de paragem
 	if(piso > eP->piso){
+		printf("*L – Livre \n *O – ocupado");
 		return;
 	}
 	if(linha > eP->linha){
-		printf("\n");
 		imprimirParque(piso +1, 1, 1, lista, eP);
 		return;
 	}
 	if(coluna > eP->coluna){
-		printf("\n");
 		imprimirParque(piso, linha +1, 1, lista, eP);
 		return;
 	}
@@ -81,44 +125,47 @@ void imprimirParque(int piso, int linha, int coluna, node_t *lista, estruturaPar
 //Mudar para recursividade
 int *lugarMaisProximo(int piso, int linha, int coluna, node_t *lista, estruturaParque *eP){//Retornar uma array [piso, linha, coluna]
 	//int totalEspacosParque = eP->coluna * eP->linha * eP->piso;
-	//int i,j,k;
-	int coordenada[3];
+	int i,j,k;
+	int *coordenada = malloc(sizeof(int) *3);
+	/*
+	printf("\n[1]piso: %d, linha: %d, coluna: %d recebido\n", coordenada[0], coordenada[1], coordenada[2]);
+	printf("\n[1]piso: %d, linha: %d, coluna: %d a verificar\n", piso, linha, coluna);
 	
 	//casos de paragem
-	if(piso > eP->piso & linha > eP->linha && coluna > eP->coluna){
+	if(piso > eP->piso && linha > eP->linha && coluna > eP->coluna){
 		coordenada[0] = -1;
 		return coordenada;
 	}
 	
-	if(piso > eP->piso || coordenada[3] != 0){
-		printf("\npiso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[3]);
+	if(piso > eP->piso || coordenada[2] != 0){
+		printf("\n[final piso]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
 		return coordenada;
 	}
 	
-	if(linha > eP->linha){
-		printf("\n");
+	if(linha > eP->linha || coordenada[2] != 0){
+		printf("\n[final linha]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
 		lugarMaisProximo(piso +1, 1, 1, lista, eP);
 		return coordenada;
 	}
 	
-	if(coluna > eP->coluna){
-		printf("\n");
-		lugarMaisProximo(piso, linha +1, 1, lista, eP);
+	if(coluna > eP->coluna || coordenada[2] != 0){
+		printf("\n[final coluna]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
+		lugarMaisProximo(piso, linha +1 , 1, lista, eP);
 		return coordenada;
 	}
 	
 	//código para executar
 	if(procurarNaCoord(lista, piso, linha, coluna) == 0){
-		printf("lugar encontrado");
+		printf("\nlugar encontrado\n");
     	coordenada[0] = piso;
         coordenada[1] = linha;
         coordenada[2] = coluna;
+        printf("\n[lugar encontrado]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
 		return coordenada;	
 	}
 	
-	lugarMaisProximo(piso, linha, coluna+1, lista, eP);
+	lugarMaisProximo(piso, linha, coluna+1, lista, eP);*/
 	
-	/*
 	for(i=1; i < eP->piso +1; i++){
         for(j=1;j< eP->linha +1; j++){
             for(k =1; k < eP->coluna +1; k++){
@@ -128,11 +175,12 @@ int *lugarMaisProximo(int piso, int linha, int coluna, node_t *lista, estruturaP
                 	coordenada[1] = j;
                 	coordenada[2] = k;
 					return coordenada;	
+					free(coordenada);
 				}
 				//printf("%d", procurarNaCoord(lista, i,j,k));
             }
         }
-	}*/
+	}
 }
 
 
@@ -142,69 +190,30 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 	//->verificar se as letras são seguidas[X]
 	//->Se já existe a matricula [X]
 	int coordPiso, coordLinha, coordColuna, i,haCarro = 1, opcao;
-	char matriculaCarro[6], modeloCarro[100];
-	int coordeMaisProxima[3];
+	char matriculaCarro[8], modeloCarro[100];
+	int *coordeMaisProxima = lugarMaisProximo(1,1,1,lista, eP);
 	
 	//verificar a matricula
-	int letras, num, espaco, charJunto;
+	int espaco;
 	
 	do{	
-		letras = 0;
-		num = 0;
 		espaco = 0;
-		charJunto=0;
 		i= 0;
 		
 		printf("Matricula do carro: ");
 		scanf("%s", &matriculaCarro);
         		
         for(i = 0; i < strlen(matriculaCarro); i++){
-        	if(isdigit(matriculaCarro[i])){
-        		num++;
-			}
-			if(isalpha(matriculaCarro[i])){
-				letras++;
-				if(!isalpha(matriculaCarro[i+1])){
-					printf("proximo nao e char");
-					charJunto++;
-				}
-			}
 			if(isspace(matriculaCarro[i])){
 				espaco++;
 			}
 		}
 		
 		//O if é para o 1ºcaso
-		if(strlen(matriculaCarro) != 6){//Se o tamanho d array da matricula for maior que 7
-			printf("Matricula invAlida.\n");//Retornar erro
-			printf("Formato: '00AA00'\n");
+		if(!(strlen(matriculaCarro) > 1 && strlen(matriculaCarro) <8)){//Se o tamanho d array da matricula for maior que 7
+			printf("Matricula invAlida, maximo caracteres e 8\n");//Retornar erro
 			i++;
 		}
-		
-		if(espaco != 0 && i == 0){
-			printf("Matricula levou um espaço.\n");//Retornar erro
-			i++;
-		}
-		
-		if(letras != 2 && i == 0){
-			printf("\nMatricula tem mais letras do que o devido.\n");//Retornar erro
-			printf("Formato: '00AA00'\n");
-			i++;
-		}
-		
-		if(charJunto >= 2 && i == 0){
-			printf("\nAs letras da matricula estam separadas.\n");//Retornar erro
-			printf("Formato: '00AA00'\n");
-			i++;
-		}
-		
-		if(num != 4 && i == 0){
-			printf("\nMatricula tem mais numeros do que o devido.\n");//Retornar erro
-			printf("Formato: '00AA00'\n");
-			i++;
-		}
-		
-		printf("esp: %d, num: %d, letr: %d", espaco, num, letras);
 		
 		if(procurarMatricula(&lista, matriculaCarro) == 1){
 			printf("Matricula ja existedentro do parque");	
@@ -217,7 +226,7 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 			return carro;
 		}*/
 		
-	}while(strlen(matriculaCarro) != 6 || espaco != 0 || letras != 2 || num != 4 || charJunto >= 2 || procurarMatricula(&lista, matriculaCarro) == 1);
+	}while(!(strlen(matriculaCarro) > 1 && strlen(matriculaCarro) <8) || espaco != 0 || procurarMatricula(&lista, matriculaCarro) == 1);
 	
 	printf("Modelo do carro");
 	scanf("%s", &modeloCarro);
@@ -230,12 +239,9 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 			case 1:
 				{
 					//ver como mudar isto 
-					printf("piso lugar mais proximo: %d", lugarMaisProximo(1,1,1,lista, eP)[0]);
-					printf("linha lugar mais proximo: %d", lugarMaisProximo(1,1,1,lista, eP)[1]);
-					printf("coluna lugar mais proximo: %d", lugarMaisProximo(1,1,1,lista, eP)[2]);
-					coordeMaisProxima[0] = lugarMaisProximo(1,1,1,lista, eP)[0];
-					coordeMaisProxima[1] = lugarMaisProximo(1,1,1,lista, eP)[1];
-					coordeMaisProxima[2] = lugarMaisProximo(1,1,1,lista, eP)[2];
+					printf("piso lugar mais proximo: %d", coordeMaisProxima[0]);
+					printf("linha lugar mais proximo: %d", coordeMaisProxima[1]);
+					printf("coluna lugar mais proximo: %d", coordeMaisProxima[2]);
 					
 					printf("Coordenada mais proxima Piso %d, Linha %d, Coluna %d", coordeMaisProxima[0], coordeMaisProxima[1], coordeMaisProxima[2]);
 					
@@ -279,7 +285,10 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 						printf("\nCoordenadas para estacionar: %d %d %d\n", coordPiso, coordLinha, coordColuna); 
 						
 						haCarro = procurarNaCoord(lista, coordPiso, coordLinha, coordColuna);
-						printf("\nhaCarro: %d\n", haCarro);
+						
+						if(haCarro == 1){
+							printf("Já existe um carro nessas coordenada");
+						}
 					}while(haCarro == 1 );
 					opcao = 0;
 				}
@@ -294,7 +303,7 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 
 dados_t *removerCarroMatricula(node_t *lista){
 	char matriculaProcurar[6];
-	int letras = 0, num = 0, espaco = 0, i;
+	int espaco = 0, i;
 	dados_t *carroProcura;
 	
 	do{
@@ -302,47 +311,22 @@ dados_t *removerCarroMatricula(node_t *lista){
 		gets(matriculaProcurar);
         		
         for(i = 0; i < strlen(matriculaProcurar); i++){
-        	if(isdigit(matriculaProcurar[i])){
-        		num++;
-			}
-			if(isalpha(matriculaProcurar[i])){
-				letras++;
-			}
 			if(isspace(matriculaProcurar[i])){
 				espaco++;
 			}
 		}
 		
 		//O if é para o 1ºcaso
-		if(strlen(matriculaProcurar) != 6){//Se o tamanho d array da matricula for maior que 7
-			printf("Matricula invAlida.\n");//Retornar erro
-			printf("Formato: '00AA00'");
+		if(!(strlen(matriculaProcurar) > 1 && strlen(matriculaProcurar) <8)){//Se o tamanho d array da matricula for maior que 7
+			printf("Matricula invAlida, maximo de 8 caracteres\n");//Retornar erro
 		}
 		
 		if(espaco > 0){
 			printf("Matricula levou um espaço.\n");//Retornar erro
 		}
 		
-		if(letras > 3){
-			printf("Matricula tem mais letras do que o devido.\n");//Retornar erro
-			printf("Formato: '00AA00'");
-		}
-		
-		if(num > 5){
-			printf("Matricula tem mais numeros do que o devido.\n");//Retornar erro
-			printf("Formato: '00AA00'");
-		}
-		
-		printf("esp: %d, num: %d, letr: %d", espaco, num, letras);
-		
-		num = 0;
-		letras = 0;
 		espaco = 0;
-	}while(strlen(matriculaProcurar) != 6 || espaco > 0 || letras > 3 || num > 5);
-	
-	printf("\nMatricula a procurar");
-	puts(matriculaProcurar);
-	printf("\n\n\n");
+	}while(!(strlen(matriculaProcurar) > 1 && strlen(matriculaProcurar) <8) || espaco > 0);
 	
 	time_t horaSaida = time(&horaSaida);
 	
@@ -353,8 +337,40 @@ dados_t *removerCarroMatricula(node_t *lista){
 }
 
 double valorAPagarComPreco(estruturaParque *eP, dados_t *carro){
-	carro->horaSaida = 1640983652;
 	double valorPagar = difftime(carro->horaSaida, carro->horaEntrada)/60/60 * eP->preco;
-	printf("Valor a pagar %f\n", valorPagar);
+	printf("Valor a pagar %.2f\n", valorPagar);
 	return valorPagar;
+}
+
+void mudarPrecoHora(estruturaParque *eP){
+	FILE *estruturaParqueFicheiro;
+	float novoPreco;
+	char errorString[512];
+
+	
+	if(access("estruturaParque.csv", F_OK) == 0 ){//existe ficheiro
+		printf("Qual o novo precopor hora do parque?");
+		scanf("%f", &novoPreco);
+		if((estruturaParqueFicheiro = fopen("estruturaParque.csv", "ab+")) == NULL){
+			printf("Failed to open file.\n");
+   			perror(errorString);
+   			printf("%s\n", errorString);
+		}	
+		
+		fprintf(estruturaParqueFicheiro, "%d, %d, %d, %f\n", eP->piso, eP->linha, eP->coluna, novoPreco);
+		if(fwrite != 0){
+			printf("contents to file written successfully !\n");
+		}
+		else{
+			printf("error writing file !\n");
+		}
+		fclose(estruturaParqueFicheiro);
+		printf("\nEstrutura Parque preco antigo %f\n", eP->preco);
+		eP->preco = novoPreco;
+		printf("\nEstrutura Parque preco novo %f\n", eP->preco);
+	}else{
+		printf("O ficheiro nao existe");
+		
+	}
+	return;
 }

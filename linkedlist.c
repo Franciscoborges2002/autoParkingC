@@ -30,14 +30,13 @@ void inserirInicio(node_t **lista, dados_t *dadosCriarNode){
 }
 
 int removerElemento(node_t **lista, dados_t *carroRemover){//mudar só para a matricula
-printf("\n\npointer da lista func remover elemento: %d", lista);
 	node_t *aux = *lista;
 	node_t *ant = *lista;
 	int encontrado = 0;
 
 	//Se a lista estiver vazia
 	if(lista == NULL){
-		printf("\nNenhum item a remover");
+		printf("\nNenhum item a remover\n");
 		return;
 	}
 	
@@ -102,9 +101,7 @@ node_t *procurarMatriculaRetornarObjeto(node_t **lista, char matriculaProcurar[]
 		}
 		aux = aux->next;
 	}
-	printf("hereeeee");
 	node_t *aux2 = criarNodeComMatricula("NULL");
-	printf("here");
 	return aux2;
 }
 
@@ -113,12 +110,13 @@ int tamanhoLista(node_t *lista){
 	int contador= 0;
 	while(aux!=NULL){
 		contador++;
+		aux = aux->next;
 	}
 	return contador;
 }
 
 void listar(node_t *lista){
-	printf("\nLista de carros: ");
+	printf("Lista de carros: ");
 	node_t *aux = lista;
 	while(aux!=NULL){
 		printf("\n[%d,%d,%d]Matricula: ", aux->dados.cordPiso +1,aux->dados.cordLinha +1, aux->dados.cordColuna +1);
@@ -138,7 +136,7 @@ int procurarNaCoord(node_t *lista, int piso, int linha, int coluna){
 	return 0;
 }
 
-char * procurarNaCoordReturnMatricula(node_t *lista){
+void procurarNaCoordMostrarMatricula(node_t *lista){
 	node_t *aux = lista;
 	
 	int pisoEsta, linhaEsta, colunaEsta;
@@ -159,9 +157,40 @@ char * procurarNaCoordReturnMatricula(node_t *lista){
 		if(aux->dados.cordPiso == pisoEsta && aux->dados.cordLinha == linhaEsta &&aux->dados.cordColuna == colunaEsta){
 			printf("\nMatricula do carro nas cordenadas: ");
 			puts(aux->dados.matricula);
-			return "a";
+			free(aux);
+			return;
 		}
 		aux = aux->next;
 	}
-	return "NULL";
+	
+	printf("\nNao existe nenhum veiculo nas coordenadas.\n");
+	free(aux);
+	return;
+}
+
+/*Pensar depois
+node_t *ordenarLista(node_t *lista){
+	
+}*/
+
+
+void tempoEstacionado(node_t *lista){
+	int i;
+	node_t *aux =lista;
+	struct tm *info;
+	time_t horaEntrada = aux->dados.horaEntrada;
+	time_t horaSaida = time(&horaSaida);
+	int tamanhoDaLista = tamanhoLista(lista);
+	double tempoPassado;
+	
+	//float tempoEstacionados[tamanhoDaLista];
+	
+	while(aux !=NULL){
+		horaEntrada = aux->dados.horaEntrada;
+		tempoPassado = difftime(horaSaida, horaEntrada) /60/60;
+		printf("Tempo estacionado da carro %s foi de %f horas.\n", aux->dados.matricula, tempoPassado);
+		aux = aux->next;
+	}
+	free(aux);
+	return;
 }

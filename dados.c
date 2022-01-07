@@ -1,35 +1,24 @@
 #include <stdlib.h>
 #include "dados.h"
 
+
+//Função para criar o veiculo com a struct para inserir na estrutura de dados
 dados_t *criarVeiculo(char matricula[], char modelo[], int piso, int linha, int coluna){
-	//int i;
-	time_t horaEntrada = time(&horaEntrada);
-	
-	//printf("\nLength da matricula: %d\n", strlen(matricula));
+	time_t horaEntrada = time(&horaEntrada);//A var recebe a hora atual do sistema como hora de entrada do carro
 	
 	dados_t *elemento = (dados_t *)malloc(sizeof(dados_t));//Alocar a memoria para os dados
+	strcpy(elemento->matricula, matricula);//passar a matricula para a struct
+	strcpy(elemento->modelo, modelo);//passar o modelo para a struct
 	
-	//elemento->matricula = matricula;
-	/*for(i = 0; i <= 6; i++){
-		elemento->matricula[i] = matricula[i];
-	}*/
-	strcpy(elemento->matricula, matricula);
+	elemento->cordPiso = piso - 1;//passar o piso para a struct
+	elemento->cordLinha = linha -1;//passar a linha para a struct
+	elemento->cordColuna = coluna -1;//passar a coluna para a struct
+	elemento->horaEntrada = horaEntrada;//passar a hora de entrada para a struct
+	elemento->horaSaida = 0;//passar a hora de saida para a struct
 	
-	/*for(i = 0; i <= 20; i++){
-		elemento->modelo[i] = modelo[i];
-	}*/
-	strcpy(elemento->modelo, modelo);
-	
-	elemento->cordPiso = piso - 1;
-	elemento->cordLinha = linha -1;
-	elemento->cordColuna = coluna -1;
-		
-	//printf("hora entrada %d", horaEntrada);
-	elemento->horaEntrada = horaEntrada;
-	elemento->horaSaida = 0;
-	
-	return elemento;
+	return elemento;//retornar o elemento
 }
+
 
 void listarCarro(dados_t *carro){
 	//conversão feita de segundos para dia
