@@ -4,6 +4,7 @@
 *	Este parte tem a função de manter a estrutura do parque.
 */
 
+//Função para iniciar se não há ficheiro
 estruturaParque * initParq(){
 	int linha,coluna, piso;
 	int i,j,k;
@@ -31,6 +32,7 @@ estruturaParque * initParq(){
     return eP;
 }
 
+//Função para criar alocar a memória apartir das informações do ficheiro
 estruturaParque * criarParqueApartirDeFicheiro(int piso, int linha, int coluna, float preco){
 	estruturaParque *eP = (estruturaParque *)malloc(sizeof(estruturaParque));//Alocar a memoria para os dados
 
@@ -43,159 +45,88 @@ estruturaParque * criarParqueApartirDeFicheiro(int piso, int linha, int coluna, 
     return eP;
 }
 
-//Esta a dar um piso a mais
+//Função com recursividade para imprimir o parque
 void imprimirParque(int piso, int linha, int coluna, node_t *lista, estruturaParque *eP){
-	
 	//prints
-	if(piso == 1){
-		if(linha == 1 && coluna == 1){
-			printf("Piso %d\n", piso);
+	if(piso<=eP->piso){//se o piso for menor ou igual aos pisos totais
+		if(linha <= eP->linha){//se a linha for menor ou igual as linhas totais
+			if(coluna ==1 && linha == 1){
+				printf("\n");
+				printf("Piso %d\n", piso);
+			}
 		}
-		
 	}
 	
-	if(coluna == 1){
-		if(!((linha -1) == eP->linha)){
+	if(coluna == 1){//Se for a primeira coluna
+		if(linha -1 > eP->linha){
+			
+		}else if(!((linha -1) == eP->linha)){//primeira linha
 			printf("[");
 		}
 	}
 	
-	if(linha > eP->linha){
-		/*if((piso -1) == eP->piso && (coluna -1) == eP->coluna && (linha -1) == eP->linha){
-			printf("oioi");
-		}
-		if( !((piso -1) == eP->piso) && ){
-			printf("Piso %d\n", piso +1);
-			printf("\n");
-		}*/
-		
-		printf("Piso %d\n", piso +1);
-			printf("\n");
-		
-	}
-	if(coluna > eP->coluna){
+	
+	if(coluna > eP->coluna){//Se a coluna for maior que o total, meter ]
 			printf("]");
 		printf("\n");
 	}
 	
 	//Casos de paragem
 	if(piso > eP->piso){
-		printf("*L – Livre \n *O – ocupado");
+		printf("*L = Livre ]\n[*O = ocupado]\n");
 		return;
 	}
+	
 	if(linha > eP->linha){
 		imprimirParque(piso +1, 1, 1, lista, eP);
 		return;
 	}
+	
 	if(coluna > eP->coluna){
 		imprimirParque(piso, linha +1, 1, lista, eP);
 		return;
 	}
-
-	//printf("piso: %d, linha: %d, coluna: %d", piso, linha, coluna);
 	
+	//Procurar se temos esse carro na coordenada
 	if(procurarNaCoord(lista, piso,linha,coluna) == 1){
         printf("O");
 	}else{
 		printf("L");
 	}
-	imprimirParque(piso, linha, coluna +1, lista, eP);
 	
-	/*
-	for(i=0; i < eP->piso; i++){
-        printf("piso %d:\n", i+1);
-        for(j=0;j< eP->linha; j++){
-            printf("[");
-            for(k =0; k < eP->coluna; k++){
-                //verificar se tem algum carro ou não
-                if(procurarNaCoord(lista, i+1,j+1,k+1) == 1){
-                	printf("O");
-				}else{
-					printf("L");
-				}
-				//printf("%d", procurarNaCoord(lista, i,j,k));
-            }
-            printf("]");
-            printf("\n");
-        }
-        printf("\n"); 
-	}*/
+	imprimirParque(piso, linha, coluna +1, lista, eP);//chama a função de novo e vai para a próxima coluna
 }
 
-//Mudar para recursividade
-int *lugarMaisProximo(int piso, int linha, int coluna, node_t *lista, estruturaParque *eP){//Retornar uma array [piso, linha, coluna]
-	//int totalEspacosParque = eP->coluna * eP->linha * eP->piso;
+//Retornar o lugar mais próximo
+int *lugarMaisProximo(node_t *lista, estruturaParque *eP){//Retornar uma array [piso, linha, coluna]
 	int i,j,k;
-	int *coordenada = malloc(sizeof(int) *3);
-	/*
-	printf("\n[1]piso: %d, linha: %d, coluna: %d recebido\n", coordenada[0], coordenada[1], coordenada[2]);
-	printf("\n[1]piso: %d, linha: %d, coluna: %d a verificar\n", piso, linha, coluna);
-	
-	//casos de paragem
-	if(piso > eP->piso && linha > eP->linha && coluna > eP->coluna){
-		coordenada[0] = -1;
-		return coordenada;
-	}
-	
-	if(piso > eP->piso || coordenada[2] != 0){
-		printf("\n[final piso]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
-		return coordenada;
-	}
-	
-	if(linha > eP->linha || coordenada[2] != 0){
-		printf("\n[final linha]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
-		lugarMaisProximo(piso +1, 1, 1, lista, eP);
-		return coordenada;
-	}
-	
-	if(coluna > eP->coluna || coordenada[2] != 0){
-		printf("\n[final coluna]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
-		lugarMaisProximo(piso, linha +1 , 1, lista, eP);
-		return coordenada;
-	}
-	
-	//código para executar
-	if(procurarNaCoord(lista, piso, linha, coluna) == 0){
-		printf("\nlugar encontrado\n");
-    	coordenada[0] = piso;
-        coordenada[1] = linha;
-        coordenada[2] = coluna;
-        printf("\n[lugar encontrado]piso: %d, linha: %d, coluna: %d\n", coordenada[0], coordenada[1], coordenada[2]);
-		return coordenada;	
-	}
-	
-	lugarMaisProximo(piso, linha, coluna+1, lista, eP);*/
+	int *coordenada = malloc(sizeof(int) *3);//alocar a uma array o espaço necessário
 	
 	for(i=1; i < eP->piso +1; i++){
         for(j=1;j< eP->linha +1; j++){
             for(k =1; k < eP->coluna +1; k++){
-                //verificar se tem algum carro ou não
                 if(procurarNaCoord(lista, i,j ,k) == 0){
                 	coordenada[0] = i;
                 	coordenada[1] = j;
                 	coordenada[2] = k;
-					return coordenada;	
-					free(coordenada);
+					return coordenada;//retornar a array
+					free(coordenada);//libertar o espaço
 				}
-				//printf("%d", procurarNaCoord(lista, i,j,k));
             }
         }
 	}
+	
+	coordenada[0] = -1;//Se estiver ocupado, o primeiro espaço da array tem -1
+	return coordenada;
 }
 
-
+//Função para criar o carro e retornar na struct de dados
 dados_t *criarCarro(estruturaParque *eP, node_t *lista){	
-	//Mudar a função
-	//->Meter tabela com opções para para estacionar[X]
-	//->verificar se as letras são seguidas[X]
-	//->Se já existe a matricula [X]
-	int coordPiso, coordLinha, coordColuna, i,haCarro = 1, opcao;
+	int coordPiso, coordLinha, coordColuna, i,haCarro = 1, opcao, espaco;
 	char matriculaCarro[8], modeloCarro[100];
-	int *coordeMaisProxima = lugarMaisProximo(1,1,1,lista, eP);
+	int *coordeMaisProxima = lugarMaisProximo(lista, eP);
 	
-	//verificar a matricula
-	int espaco;
-	
+	//verificar inicialização da matricula
 	do{	
 		espaco = 0;
 		i= 0;
@@ -211,48 +142,33 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 		
 		//O if é para o 1ºcaso
 		if(!(strlen(matriculaCarro) > 1 && strlen(matriculaCarro) <8)){//Se o tamanho d array da matricula for maior que 7
-			printf("Matricula invAlida, maximo caracteres e 8\n");//Retornar erro
+			printf("Matricula invalida, maximo caracteres e 8\n");//Retornar erro
 			i++;
 		}
 		
 		if(procurarMatricula(&lista, matriculaCarro) == 1){
-			printf("Matricula ja existedentro do parque");	
+			printf("Matricula ja existe dentro do parque");	
 		}
-		
-		/*if(procurarMatriculaRetornarObjeto(lista, matriculaCarro) != NULL){
-			printf("\nMatricula já existe no parque\n");
-			coordPiso = -1;
-			dados_t *carro = criarVeiculo(matriculaCarro, modeloCarro, coordPiso, coordLinha, coordColuna);
-			return carro;
-		}*/
 		
 	}while(!(strlen(matriculaCarro) > 1 && strlen(matriculaCarro) <8) || espaco != 0 || procurarMatricula(&lista, matriculaCarro) == 1);
 	
-	printf("Modelo do carro");
-	scanf("%s", &modeloCarro);
+	fflush(stdin);//Apaga o  buffer do teclado ->a string dos caracteres digitados no teclado passa a ""
+	printf("Modelo do carro: ");
+	gets(modeloCarro);
 	
 	do{
-		printf("\n [1] - Escolher lugar mais próximo livre \n [2] - Escolher por coordenadas \n");
+		printf("\n [1] - Escolher lugar mais proximo livre \n [2] - Escolher por coordenadas\n Esolher opcao: ");
 		scanf("%d", &opcao);
 		
 		switch(opcao){
 			case 1:
 				{
-					//ver como mudar isto 
-					printf("piso lugar mais proximo: %d", coordeMaisProxima[0]);
-					printf("linha lugar mais proximo: %d", coordeMaisProxima[1]);
-					printf("coluna lugar mais proximo: %d", coordeMaisProxima[2]);
+				printf("\nO carro foi estacionado no piso %d, linha %d e coluna %d\n",coordeMaisProxima[0], coordeMaisProxima[1], coordeMaisProxima[2]);
 					
-					printf("Coordenada mais proxima Piso %d, Linha %d, Coluna %d", coordeMaisProxima[0], coordeMaisProxima[1], coordeMaisProxima[2]);
-					
-					if(coordeMaisProxima[0] != -1){// Se não retornar null encontrou um lugar mais no parque, recebemos as coordenadas
-						coordPiso = coordeMaisProxima[0];
-						coordLinha = coordeMaisProxima[1];
-						coordColuna = coordeMaisProxima[2];
-					}else {
-						printf("[ERRO]: Não existem lugares no parque para estacionar!");
-					}
-					opcao = 0;
+				coordPiso = coordeMaisProxima[0];
+				coordLinha = coordeMaisProxima[1];
+				coordColuna = coordeMaisProxima[2];
+				opcao = 0;
 				break;
 				}
 			case 2:
@@ -282,12 +198,12 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 							}
 						}while((coordColuna > 0 && coordColuna <= eP->coluna) == 0);
 						
-						printf("\nCoordenadas para estacionar: %d %d %d\n", coordPiso, coordLinha, coordColuna); 
-						
 						haCarro = procurarNaCoord(lista, coordPiso, coordLinha, coordColuna);
 						
 						if(haCarro == 1){
-							printf("Já existe um carro nessas coordenada");
+							printf("\nJá existe um carro nessas coordenada");
+						}else{
+							printf("\nO carro foi estacionado no piso %d, linha %d e coluna %d\n",coordPiso, coordLinha, coordColuna);
 						}
 					}while(haCarro == 1 );
 					opcao = 0;
@@ -295,19 +211,32 @@ dados_t *criarCarro(estruturaParque *eP, node_t *lista){
 		}
 	}while(opcao !=0);	
     
-    dados_t *carro = criarVeiculo(matriculaCarro, modeloCarro, coordPiso, coordLinha, coordColuna);
+    dados_t *carro = criarVeiculo(matriculaCarro, modeloCarro, coordPiso, coordLinha, coordColuna);//criar o veiculo
     
-    return carro;
+    return carro;//retornar para a main, para remover
     
 }
 
-dados_t *removerCarroMatricula(node_t *lista){
-	char matriculaProcurar[6];
+//Função para calcular e mostrar o valor a pagar pela pessoa do carro
+double valorAPagarComPreco(estruturaParque *eP, dados_t *carro){
+	double valorPagar = difftime(carro->horaSaida, carro->horaEntrada)/60/60 * eP->preco;
+	return valorPagar;
+}
+
+//Remover carro com a matricula
+dados_t *removerCarroMatricula(node_t *lista, estruturaParque *eP){
+	char matriculaProcurar[8];
 	int espaco = 0, i;
 	dados_t *carroProcura;
+	fflush(stdin);//Apaga o  buffer do teclado ->a string dos caracteres digitados no teclado passa a ""
+	
+	if(lista == NULL){
+		printf("Nenhum carro a remover");
+		return;
+	}
 	
 	do{
-		printf("Matricula do carro: ");
+		printf("Matricula do carro a remover: ");
 		gets(matriculaProcurar);
         		
         for(i = 0; i < strlen(matriculaProcurar); i++){
@@ -330,47 +259,94 @@ dados_t *removerCarroMatricula(node_t *lista){
 	
 	time_t horaSaida = time(&horaSaida);
 	
-	carroProcura = (dados_t*)procurarMatriculaRetornarObjeto(&lista, matriculaProcurar);
-	carroProcura->horaSaida = horaSaida;
+	carroProcura = (dados_t*)procurarMatriculaRetornarObjeto(&lista, matriculaProcurar);//receber o objeto conforme a matricula
+	carroProcura->horaSaida = horaSaida;//definir a hora de saida para ao carro
 	
-	return carroProcura;
+	printf("Valor a pagar %.2f euros\n", valorAPagarComPreco(eP, carroProcura));//mostrar o valor a pagar pela pessoa
+
+	if(strcmp(carroProcura->matricula, "NULL") == 0){
+		printf("Matricula nao foi encontrada no parque");
+	}else{
+		return carroProcura;//retornar o carro, para removermos no main
+	}
+	return NULL;
 }
 
-double valorAPagarComPreco(estruturaParque *eP, dados_t *carro){
-	double valorPagar = difftime(carro->horaSaida, carro->horaEntrada)/60/60 * eP->preco;
-	printf("Valor a pagar %.2f\n", valorPagar);
-	return valorPagar;
+//Função para a serializaçao do ficheiro do parque
+estruturaParque *serializacaoFicheiroInicioEstruturaParque(){
+	char errorString[512];
+	estruturaParque *eP;
+	FILE *estruturaParqueFicheiro;
+	//Verificar se o ficheiro existe
+	if( access("estruturaParque.csv", F_OK) == 0){//Verificar se o ficheiro existe
+	
+		int piso, linha, coluna;
+		float preco;
+		estruturaParqueFicheiro = fopen("estruturaParque.csv", "r");//Abrir o ficheiro e meter em modo para ler
+		fscanf(estruturaParqueFicheiro, "%d, %d, %d, %f", &piso, &linha, &coluna, &preco);//Dar scan ao que nós queremos
+		estruturaParque *eP = (estruturaParque *)malloc(sizeof(estruturaParque));//Alocar a memoria para os dados
+		eP = criarParqueApartirDeFicheiro(piso, linha, coluna, preco);//criar o objeto para meter na struct
+		
+		fclose(estruturaParqueFicheiro);//fechar o ficheiro
+		return eP;//retornar a estrutura do parque
+	}else{//Se o ficheiro não existe
+		eP = (estruturaParque *)initParq();//Vamos chamar a função para perguntar o piso, linh, coluna e preco
+		estruturaParqueFicheiro = fopen("estruturaParque.csv", "ab+");//Vai criar e abrir o ficheiro
+		
+		if (estruturaParqueFicheiro != NULL) {//Se exitir o ficheiro
+		    fprintf(estruturaParqueFicheiro, "%d, %d, %d, %f\n", eP->piso, eP->linha, eP->coluna, eP->preco);//Vamos escrever o que nós queremos
+		    
+			if(fwrite != 0){//Se não conseguir escrever no ficheiro
+				printf("Escrita bem sucedida!\n");
+			}
+			else{
+				printf("Escrita mal sucedida!\n");
+			}
+		}
+		
+		if(estruturaParqueFicheiro == NULL){//Se não conseguir abrir o ficheiro
+			printf("Erro ao abrir o ficheiro\n");
+   			perror(errorString);//receber o erro que aconteceu
+   			printf("%s\n", errorString);//Mostrar o erro que aconteceu
+		}
+		fclose(estruturaParqueFicheiro);
+		return eP;//retornar a estrutura do parque
+	}
 }
 
+//Fnção para mudar o preço por hora do parque
 void mudarPrecoHora(estruturaParque *eP){
 	FILE *estruturaParqueFicheiro;
 	float novoPreco;
 	char errorString[512];
 
 	
-	if(access("estruturaParque.csv", F_OK) == 0 ){//existe ficheiro
-		printf("Qual o novo precopor hora do parque?");
-		scanf("%f", &novoPreco);
-		if((estruturaParqueFicheiro = fopen("estruturaParque.csv", "ab+")) == NULL){
+	if(access("estruturaParque.csv", F_OK) == 0 ){//Se existir o ficheiro
+		do{
+			printf("Qual o novo preco por hora do parque? ");//Perguntar novo preço
+			scanf("%f", &novoPreco);//Alocar a var novoPreco
+		}while(novoPreco <= 0);
+		
+		if((estruturaParqueFicheiro = fopen("estruturaParque.csv", "w")) == NULL){//Tentar abrir o fivheiro para escrever, se for NULL, não existe ficheiro
 			printf("Failed to open file.\n");
-   			perror(errorString);
-   			printf("%s\n", errorString);
+   			perror(errorString);//Erro que ocorreu ao tentar abrir
+   			printf("%s\n", errorString);//Mostrar que erro foi
 		}	
 		
+		//Se conseguir abri o ficheiro temos de escrever o novoPreco
 		fprintf(estruturaParqueFicheiro, "%d, %d, %d, %f\n", eP->piso, eP->linha, eP->coluna, novoPreco);
-		if(fwrite != 0){
-			printf("contents to file written successfully !\n");
+		
+		if(fwrite != 0){//Se não conseguir escrever no ficheiro
+			printf("Escrita bem sucedida!\n");
 		}
 		else{
-			printf("error writing file !\n");
+			printf("Escrita mal sucedida!\n");
 		}
+
+		//fechar o fichpeiro
 		fclose(estruturaParqueFicheiro);
-		printf("\nEstrutura Parque preco antigo %f\n", eP->preco);
 		eP->preco = novoPreco;
-		printf("\nEstrutura Parque preco novo %f\n", eP->preco);
-	}else{
-		printf("O ficheiro nao existe");
-		
+	}else{//O ficheiro não existe
+		printf("Erro ao abrir o ficheiro");	
 	}
-	return;
 }
