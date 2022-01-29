@@ -73,6 +73,9 @@ Compile the files
 
 And finaly just run 'main.exe'.
 
+## My grade of the project
+    
+    I got a 20(the maximum grade) in this project :) .
 
 ## License
 
